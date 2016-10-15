@@ -7,6 +7,8 @@
 </head>
 <body>
 
+	    @include('layouts.partials.navbar')
+
     <div class="container">
 	    @if (session()->has('SUCCESS_MESSAGE'))
 	    	<div class="alert alert-success">{{ session('SUCCESS_MESSAGE') }}</div>

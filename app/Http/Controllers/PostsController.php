@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 
+use Illuminate\Support\Facades\Log;
+
 class PostsController extends Controller
 {
     /**
@@ -15,8 +17,17 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index','show']]);
+    }
+    
     public function index()
     {
+
+
         $posts = Post::paginate(10);
 
         $data['posts'] = $posts;
@@ -58,13 +69,15 @@ class PostsController extends Controller
         $post->title = $request->title;
         $post->url = $request->url;
         $post->content = $request->content;
-        $post->user_id = 1;
+        $post->user_id = $request->user()->id;
         $post->save();
 
 
         $request->session()->flash('SUCCESS_MESSAGE', 'Post was saved successfully');
 
-        return redirect('/posts');
+        Log::info($post);
+
+        return redirect('/posts/create');
     }
 
     /**
@@ -75,7 +88,8 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
+
         $data['post'] = $post;
 
         return view('posts.show', $data);
@@ -89,7 +103,8 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
+
         $data['post'] = $post;
         return view('posts.edit', $data);
     }
@@ -115,7 +130,10 @@ class PostsController extends Controller
         $request->session()->forget('ERROR_MESSAGE');
 
 
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
+
+      
+
         $post->title = $request->title; 
         $post->url = $request->url;
         $post->content = $request->content;
@@ -135,6 +153,9 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        return 'delete a specific post';
+        $post = Post::findOrFail($id);
+
+        $post->delete();
+        return redirect('/posts');
     }
 }
