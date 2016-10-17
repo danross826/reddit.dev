@@ -21,7 +21,7 @@
 		    <td>{{ $post->title }}</td>
 		    <td>{{ $post->url }}</td>
 		    <td>{{ $post->content }}</td>
-		    <td>{{ $post->created_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>  
+		    <td>{{ $post->created_at}}</td>  
 	    </tr>  
 		
 	@endforeach
