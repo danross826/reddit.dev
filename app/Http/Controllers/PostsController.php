@@ -24,17 +24,28 @@ class PostsController extends Controller
         $this->middleware('auth', ['except' => ['index','show']]);
     }
     
-    public function index()
+    public function index(Request $request)
     {
+        if($request->has('search_post')){
 
 
-        $posts = Post::paginate(10);
+            $posts = Post::where('title','LIKE','%' . $request['search_post'] . '%')
+            ->orderBy('created_at','desc')
+            ->paginate(10);
+        }else{
+            $posts = Post::paginate(10);
+        }
+
 
         $data['posts'] = $posts;
         
         return view('posts.index', $data);
 
     }
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
