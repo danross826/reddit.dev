@@ -29,10 +29,14 @@ class AuthController extends Controller
      *
      * @return void
      */
+
+    // protected $redirectPath = '/profile';
+
     public function __construct()
     {
+
         $this->middleware('guest', ['except' => 'getLogout']);
-        $this->redirectPath = action('PostsController@create');
+        $this->redirectPath = '/profile';
     }
 
     /**

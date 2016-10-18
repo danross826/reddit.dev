@@ -37,6 +37,10 @@ get('/increment/{number?}', 'HomeController@increment');
 
 get('/counter/{count}', 'HomeController@counter');
 
+get('/profile', function(){
+	return redirect()->action('UsersController@show', Auth::id());
+});
+
 Route::resource('posts', 'PostsController');
 
 Route::resource('users', 'UsersController', ['except' => ['create','store']]);
@@ -44,7 +48,7 @@ Route::resource('users', 'UsersController', ['except' => ['create','store']]);
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::post('users/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
 // Registration routes...

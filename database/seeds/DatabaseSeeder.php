@@ -20,9 +20,13 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Deleting posts records');
         DB::table('posts')->delete();
 
+        $this->command->info('Deleting votes records');
+        DB::table('votes')->delete();
+
 
         $this->call(UserSeeder::class);
         $this->call(PostSeeder::class);
+        $this->call(VoteSeeder::class);
 
         Model::reguard();
     }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Vote;
 
 use Illuminate\Support\Facades\Log;
 
@@ -27,8 +28,6 @@ class PostsController extends Controller
     public function index(Request $request)
     {
         if($request->has('search_post')){
-
-
             $posts = Post::where('title','LIKE','%' . $request['search_post'] . '%')
             ->orderBy('created_at','desc')
             ->paginate(10);
@@ -97,13 +96,21 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::with('user')->findOrFail($id);
+        if ($request->user()) {
+            $voteRequest = $request->user();
+            $user_vote = $post->userVote($voteRequest['id']);
+            // var_dump($voteRequest['id']);
+        } else {
+            $user_vote = null;
+        }
 
-        $data['post'] = $post;
 
-        return view('posts.show', $data);
+        $data = compact('post', 'user_vote');
+
+        return view('posts.show')->with($data);
     }
 
     /**
@@ -169,4 +176,27 @@ class PostsController extends Controller
         $post->delete();
         return redirect('/posts');
     }
+
+    public function addVote(Request $request)
+    {
+        Model::unguard();
+        $vote = Vote::with('post')->firstOrCreate([
+            'post_id' => $request->input('post_id'),
+            'user_id' => $request->user()->id
+        ]);
+        $vote->vote = $request->input('vote');
+        $vote->save();
+        Model::reguard();
+        $post = $vote->post;
+        $post->vote_score = $post->voteScore();
+        $post->save();
+        $data = [
+            'vote_score' => $post->vote_score,
+            'vote' => $vote->vote
+        ];
+        return $data;
+    }
+
+
+
 }

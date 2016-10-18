@@ -45,4 +45,9 @@
 
 		</table>
 
+<?php
+
+var_dump($user);
+
+?>
 @stop

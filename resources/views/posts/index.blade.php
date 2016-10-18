@@ -8,6 +8,7 @@
 
 
 		<tr>
+			<th>Vote Score</th>
 		    <th>Title</th>
 		    <th>Url</th> 
 		    <th>Content</th>
@@ -18,13 +19,13 @@
 	@foreach ($posts as $post)
 
 		<tr>
-
+			<td>{{ $post->vote_score }}</td>
 		    <td>{{ $post->title }}</td>
-		    <td>{{ $post->url }}</td>
+		    <td><a href="{{ $post->url }}">{{ $post->url }}</a></td>
 		    <td>{{ $post->content }}</td>
 		    <td>{{ $post->created_at}}</td>
 		    <td>{{ $post->user->name}}</td>  
-	    </tr>  
+	    </tr>
 		
 	@endforeach
 
