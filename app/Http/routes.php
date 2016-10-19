@@ -25,6 +25,8 @@ Route::get('/add/{a?}/{b?}',function($a = 1, $b = 2){
 	return $answer;
 });
 
+
+
 get('/roll-dice/{guess}', 'HomeController@rollDice');
 
 get('/increment', 'HomeController@showIncrement');
@@ -54,6 +56,11 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 // Registration routes...
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+//routes to vote
+Route::post('posts/addvote', 'PostsController@addVote');
+Route::post('votes/downvote', 'PostsController@downVote');
+Route::post('posts/delete', 'PostsController@destroy');
 
 
 

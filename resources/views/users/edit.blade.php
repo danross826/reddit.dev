@@ -22,7 +22,7 @@
         <br>
         Email: <input type="text" name="email" value="{{ (old('email') == null) ? $user->email : old('email') }}">
         <br>
-        Password: <input name="password" value="{{ (old('password') == null) ? $user->password : old('password') }}">
+        Password: <input name="password" value="">
         <br>
         <button class="btn btn-primary">Submit</button>
     </form>

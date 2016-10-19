@@ -27,9 +27,15 @@ class PostsController extends Controller
     
     public function index(Request $request)
     {
+        if ($request->has('sort')) {
+            $sort = $request->sort;
+        }else {
+            $sort = 'created_at';
+        }
+
         if($request->has('search_post')){
             $posts = Post::where('title','LIKE','%' . $request['search_post'] . '%')
-            ->orderBy('created_at','desc')
+            ->orderBy($sort,'desc')
             ->paginate(10);
         }else{
             $posts = Post::paginate(10);
@@ -169,8 +175,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->id;
         $post = Post::findOrFail($id);
 
         $post->delete();
@@ -179,22 +186,32 @@ class PostsController extends Controller
 
     public function addVote(Request $request)
     {
-        Model::unguard();
-        $vote = Vote::with('post')->firstOrCreate([
-            'post_id' => $request->input('post_id'),
-            'user_id' => $request->user()->id
-        ]);
-        $vote->vote = $request->input('vote');
+        $vote = Vote::firstOrCreate(['post_id' => $request->id, 'user_id' => $request->user_id]);
+
+        $vote->user_id = $request->user_id;
+        $vote->post_id = $request->id;
+        $vote->vote = 1;
         $vote->save();
-        Model::reguard();
         $post = $vote->post;
         $post->vote_score = $post->voteScore();
         $post->save();
-        $data = [
-            'vote_score' => $post->vote_score,
-            'vote' => $vote->vote
-        ];
-        return $data;
+
+        return redirect('/posts/' . $vote->post_id);
+    }
+
+        public function downVote(Request $request)
+    {
+        $vote = Vote::firstOrCreate(['post_id' => $request->id, 'user_id' => $request->user_id]);
+
+        $vote->user_id = $request->user_id;
+        $vote->post_id = $request->id;
+        $vote->vote = 0;
+        $vote->save();
+        $post = $vote->post;
+        $post->vote_score = $post->voteScore();
+        $post->save();
+
+        return redirect('/posts/' . $vote->post_id);
     }
 
 

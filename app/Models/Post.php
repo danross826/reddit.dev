@@ -41,8 +41,9 @@ class Post extends BaseModel
     {
         return $this->votes()->where('user_id', '=', $userId)->first();
     }
-    
-    public static function calculateVoteScore()
+
+
+        public static function calculateVoteScore()
     {
         $posts = self::all();
         foreach ($posts as $post) {

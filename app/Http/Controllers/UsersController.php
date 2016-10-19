@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Hash;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -77,7 +77,9 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = user::find($id);
+        $score = $user->posts->sum('vote_score');
         $data['user'] = $user;
+        $data['score'] = $score;
 
 
         return view('users.show', $data);
@@ -118,7 +120,7 @@ class UsersController extends Controller
         $user = user::find($id);
         $user->name = $request->name; 
         $user->email = $request->email;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->save();
 
         return redirect()->action('UsersController@show',$user->id);

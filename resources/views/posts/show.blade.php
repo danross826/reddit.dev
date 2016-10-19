@@ -22,16 +22,36 @@
 	
 	</table>
 
-		<div class="col-sm-2">
-			<div class="row">
-				
-			</div>
-			<div class="row">
-				<p class="vote-score text-center" id="vote-score">{{ $post->voteScore() }}</p>
-			</div>
-			<div class="row">
+		@if(Auth::check())
+			<div class="col-sm-2">
+				<div class="row">
+					<form class="form" method="POST" action="{{ action('PostsController@addVote') }}">
+					
+						<input type="hidden" name="id" value="{{ $post->id }}">
+						<input type="hidden" name="user_id" value="{{ $post->user_id }}">
 
-			</div>
-		</div>
+						{!! csrf_field() !!}
+						<input type="submit" value="Vote Up" class="btn btn-default">
+					</form>
+					<form class="form" method="POST" action="{{ action('PostsController@downVote') }}">
+					
+						<input type="hidden" name="id" value="{{ $post->id }}">
+						<input type="hidden" name="user_id" value="{{ $post->user_id }}">
+
+						{!! csrf_field() !!}
+						<input type="submit" value="Vote Down" class="btn btn-default">
+					</form>
+					<form class="form" method="POST" action="{{ action('PostsController@destroy') }}">
+					
+						<input type="hidden" name="id" value="{{ $post->id }}">
+
+						{!! csrf_field() !!}
+						<input type="submit" value="Delete" class="btn btn-default">
+					</form>
+					<a href="{{ $post->id }}/edit" class="btn btn-default">Edit</a>
+				</div>
+		@endif
+
+
 
 @stop

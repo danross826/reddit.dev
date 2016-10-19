@@ -20,16 +20,16 @@
 
 		<tr>
 			<td>{{ $post->vote_score }}</td>
-		    <td>{{ $post->title }}</td>
+		    <td><a href="/posts/{{ $post->id }}">{{ $post->title }}</a></td>
 		    <td><a href="{{ $post->url }}">{{ $post->url }}</a></td>
 		    <td>{{ $post->content }}</td>
 		    <td>{{ $post->created_at}}</td>
-		    <td>{{ $post->user->name}}</td>  
+		    <td><a href="/users/{{ $post->user->id }}">{{ $post->user->name }}</a></td>
 	    </tr>
 		
 	@endforeach
 
-{{-- 	{!! $posts->render() !!} --}}
+	{!! $posts->render() !!}
 
 		</table>
 
@@ -38,14 +38,32 @@
 		        <div class="col-md-6">
 		    		<h2>Search Bar</h2>
 			            <div id="custom-search-input">
-			                <div class="input-group col-md-12">
+			                <div class="col-md-12">
 			                	<form action="{{ action('PostsController@index') }}" method="GET" class="form">
-				                    <input type="text" class="form-control input-lg" placeholder="Search Posts" name="search_post" />
-				                    <span class="input-group-btn">
+				                   
+
+				                   <input type="text" class="form-control input-lg" placeholder="Search Posts" name="search_post" />
+
+				                  	<div class="radio">
+				                  		<label>
+										<input type="radio" name="sort" value="created_at" id="optionsRadios1">
+										Order by date.
+										</label>
+									</div>
+									<div class="radio">
+										<label>
+										<input type="radio" name="sort" value="vote_score" id="optionsRadios2">
+										Order by vote.
+										</label>
+									</div>
+
 				                        <button class="btn btn-info btn-lg" type="submit">
 				                            <i class="glyphicon glyphicon-search"></i>
 				                        </button>
-				                    </span>
+
+
+
+
 			                    </form>
 
 			                </div>
