@@ -73,11 +73,11 @@ class PostsController extends Controller
 
         $rules = array(
         'title' => 'required|max:100',
-        'url'   => 'required',
+        'url'   => 'required|url',
         'content'=>'required',
         );
 
-        $request->session()->flash('ERROR_MESSAGE', 'Post was not saved. Please see error messages below.');
+        $request->session()->flash('ERROR_MESSAGE', 'Post was not saved.');
         $this->validate($request, $rules);
         $request->session()->forget('ERROR_MESSAGE');
 

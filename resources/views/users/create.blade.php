@@ -1,6 +1,5 @@
 @extends('layouts.master')
 
-
 	@if ($errors->has('name'))
     	{!! $errors->first('name', '<span class="help-block">:message</span>') !!}
     @endif
@@ -14,6 +13,8 @@
     @endif
 
 @section('content')
+
+
 	<form class="form" method="POST" action="{{ action('UsersController@store') }}">
 		{!! csrf_field() !!}
 		Name: <input class="form-control" type="text" name="name" value="{{ old('name') }}">
