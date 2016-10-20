@@ -22,6 +22,7 @@
 	
 	</table>
 
+
 		@if(Auth::check())
 			<div class="col-sm-2">
 				<div class="row">
@@ -41,15 +42,28 @@
 						{!! csrf_field() !!}
 						<input type="submit" value="Vote Down" class="btn btn-default">
 					</form>
-					<form class="form" method="POST" action="{{ action('PostsController@destroy') }}">
-					
-						<input type="hidden" name="id" value="{{ $post->id }}">
 
-						{!! csrf_field() !!}
-						<input type="submit" value="Delete" class="btn btn-default">
-					</form>
-					<a href="{{ $post->id }}/edit" class="btn btn-default">Edit</a>
 				</div>
+			</div>
+
+		@endif
+
+
+		@if(Auth::check())
+			@if(Auth::user()->id==$post->user_id)
+				<div class="col-sm-2">
+					<div class="row">
+
+						<form class="form" method="POST" action="{{ action('PostsController@destroy') }}">
+						
+							<input type="hidden" name="id" value="{{ $post->id }}">
+
+							{!! csrf_field() !!}
+							<input type="submit" value="Delete" class="btn btn-default">
+						</form>
+						<a href="{{ $post->id }}/edit" class="btn btn-default">Edit</a>
+					</div>
+			@endif
 		@endif
 
 

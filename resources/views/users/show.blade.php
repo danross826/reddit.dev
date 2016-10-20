@@ -56,11 +56,13 @@
 			</div>
 
 		@if(Auth::check())
-			<div class="row">
-				<div class="col-sm-2">
+			@if(Auth::user()->id==$user->id)
+				<div class="row">
+					<div class="col-sm-2">
 
-					<a href="{{ $user->id }}/edit" class="btn btn-default">Edit</a>
+						<a href="{{ $user->id }}/edit" class="btn btn-default">Edit</a>
+					</div>
 				</div>
-			</div>
+			@endif
 		@endif
 @stop
